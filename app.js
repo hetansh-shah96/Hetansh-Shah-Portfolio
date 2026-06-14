@@ -37,6 +37,47 @@ document.addEventListener('DOMContentLoaded', function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+  // dividers draw left-to-right when scrolled into view
+  var dividers = document.querySelectorAll('.divider');
+  if ('IntersectionObserver' in window && dividers.length) {
+    var dio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('drawn'); dio.unobserve(e.target); }
+      });
+    }, { threshold: 0.6 });
+    dividers.forEach(function (el) { dio.observe(el); });
+  } else {
+    dividers.forEach(function (el) { el.classList.add('drawn'); });
+  }
+
+  // scroll-drawn lines: top progress bar + vertical spine
+  if (!reduce) {
+    var bar = document.createElement('div');
+    bar.className = 'scroll-bar';
+    document.body.appendChild(bar);
+
+    var spine = document.createElement('div');
+    spine.className = 'scroll-spine';
+    var fill = document.createElement('i');
+    spine.appendChild(fill);
+    document.body.appendChild(spine);
+
+    var ticking = false;
+    function drawScroll() {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - doc.clientHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.transform = 'scaleX(' + p + ')';
+      fill.style.height = (p * 100) + '%';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(drawScroll); }
+    }, { passive: true });
+    window.addEventListener('resize', drawScroll, { passive: true });
+    drawScroll();
+  }
+
   // cursor spotlight on cards
   if (fine) {
     document.querySelectorAll('.card').forEach(function (card) {
