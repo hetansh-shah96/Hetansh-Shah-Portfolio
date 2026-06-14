@@ -104,4 +104,92 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+
+  // ---- Lenis smooth scrolling (loaded only where the CDN script is) ----
+  var lenis = null;
+  if (window.Lenis && !reduce) {
+    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1.0 });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+
+  // smooth anchor scrolling for on-page links
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      if (id.length < 2) return;
+      var target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      if (links) links.classList.remove('open');
+      if (lenis) { lenis.scrollTo(target, { offset: -76 }); }
+      else {
+        var top = target.getBoundingClientRect().top + window.scrollY - 76;
+        window.scrollTo({ top: top, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+  });
+
+  // ---- animated number counters ----------------------------------------
+  var counters = document.querySelectorAll('[data-count]');
+  if (counters.length) {
+    var animateCount = function (el) {
+      var target = parseFloat(el.getAttribute('data-count'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      var dur = 1400, start = null;
+      if (reduce) { el.textContent = target + suffix; return; }
+      var step = function (ts) {
+        if (!start) start = ts;
+        var p = Math.min(1, (ts - start) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    if ('IntersectionObserver' in window) {
+      var cio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { animateCount(e.target); cio.unobserve(e.target); }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(function (el) { cio.observe(el); });
+    } else {
+      counters.forEach(animateCount);
+    }
+  }
+
+  // ---- magnetic buttons -------------------------------------------------
+  if (fine && !reduce) {
+    document.querySelectorAll('.magnetic').forEach(function (el) {
+      var strength = 0.32;
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        var mx = e.clientX - (r.left + r.width / 2);
+        var my = e.clientY - (r.top + r.height / 2);
+        el.style.transform = 'translate(' + (mx * strength) + 'px,' + (my * strength) + 'px)';
+      });
+      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+    });
+  }
+
+  // ---- lightweight scroll parallax (data-parallax="speed") -------------
+  var pxEls = document.querySelectorAll('[data-parallax]');
+  if (pxEls.length && !reduce) {
+    var pxTicking = false;
+    var applyParallax = function () {
+      var vh = window.innerHeight;
+      pxEls.forEach(function (el) {
+        var speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
+        var r = el.getBoundingClientRect();
+        var offset = (r.top + r.height / 2 - vh / 2) * speed;
+        el.style.transform = 'translateY(' + (-offset) + 'px)';
+      });
+      pxTicking = false;
+    };
+    window.addEventListener('scroll', function () {
+      if (!pxTicking) { pxTicking = true; requestAnimationFrame(applyParallax); }
+    }, { passive: true });
+    applyParallax();
+  }
 });

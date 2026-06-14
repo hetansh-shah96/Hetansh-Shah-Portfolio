@@ -6,13 +6,21 @@
 <title>Hetansh Shah — Product Analyst & Builder</title>
 <meta name="description" content="Hetansh Shah — Senior Product Analyst (Data & Strategy). Research analyst behind 2025 SPARK Matrix studies and builder of live product platforms.">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="home.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
 </head>
 <body>
+
+<!-- ambient gradient aurora -->
+<div class="aurora" aria-hidden="true"><i></i></div>
 
 <!-- NAV -->
 <nav class="nav">
   <div class="container nav-inner">
-    <a class="brand" href="index.html">
+    <a class="brand" href="#top">
       <span class="mark">HS</span>
       <span>
         <span class="brand-name">Hetansh Shah</span><br>
@@ -23,11 +31,12 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
     <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="platforms.html">Platforms</a>
-      <a href="reports.html">Research</a>
+      <a href="#top" class="active">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#research">Research</a>
       <a href="blog.html">Blog</a>
-      <a href="mailto:hetansh.ps96@gmail.com">Contact</a>
+      <a href="#contact">Contact</a>
     </div>
   </div>
 </nav>
@@ -35,45 +44,55 @@
 <div class="wrap">
 
 <!-- HERO -->
-<header class="hero">
-  <div class="container hero-grid">
-    <div class="hero-inner">
-    <span class="mono">Senior Product Analyst — Data &amp; Strategy</span>
-    <h1>I turn research into <span class="grad">products</span>, and ideas into shipped platforms.</h1>
-    <p class="hero-lead">I'm Hetansh Shah. By day I analyze markets — authoring competitive studies that rank the world's enterprise software. By night I build the kind of products I write about.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="platforms.html">
-        View platforms
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a class="btn btn-ghost" href="reports.html">Read research</a>
-    </div>
-    <div class="hero-meta">
-      <a href="mailto:hetansh.ps96@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-        hetansh.ps96@gmail.com
-      </a>
-      <a href="https://www.linkedin.com/in/hetansh-shah-ba7379204/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4v12h-4zM8 8h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4 0 4.75 2.65 4.75 6.1V20h-4v-5.4c0-1.3 0-2.95-1.8-2.95s-2.07 1.4-2.07 2.85V20H8z"/></svg>
-        LinkedIn
-      </a>
-    </div>
-    </div>
-    <div class="hero-photo reveal">
-      <div class="photo-frame">
-        <img src="img/hetansh.png" alt="Hetansh Shah">
-        <span class="photo-tag"><i></i>Helsinki</span>
+<header class="hero hero-v2" id="top">
+  <div class="container hero-grid-v2">
+    <div class="hero-copy reveal">
+      <span class="eyebrow"><i></i>Senior Product Analyst — Data &amp; Strategy</span>
+      <h1>I turn research into <span class="grad">products</span>, and ideas into shipped platforms.</h1>
+      <p class="hero-lead">I'm Hetansh Shah. By day I analyze markets — authoring competitive studies that rank the world's enterprise software. By night I build the kind of products I write about.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary magnetic" href="#projects">
+          View projects
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost magnetic" href="#contact">Get in touch</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b data-count="4">0</b><span>Live platforms</span></div>
+        <div class="stat"><b data-count="4">0</b><span>2025 SPARK studies</span></div>
+        <div class="stat"><b data-count="10" data-suffix="+">0</b><span>AI agents deployed</span></div>
       </div>
     </div>
+
+    <div class="hero-visual reveal">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-orb-fallback" aria-hidden="true"></div>
+      <figure class="hero-avatar glass">
+        <img src="img/hetansh.png" alt="Hetansh Shah">
+        <figcaption><i></i>Helsinki · Available</figcaption>
+      </figure>
+    </div>
   </div>
+
+  <div class="hero-scroll-hint">Scroll <span></span></div>
 </header>
 
-<!-- PLATFORMS (lead) -->
-<section class="section container">
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Competitive Research</span><span>Product Strategy</span><span>Full-Stack Builds</span><span>AI Agents</span><span>Data Analysis</span><span>Go-to-Market</span>
+    <span>Competitive Research</span><span>Product Strategy</span><span>Full-Stack Builds</span><span>AI Agents</span><span>Data Analysis</span><span>Go-to-Market</span>
+  </div>
+</div>
+
+<main>
+
+<!-- PROJECTS -->
+<section class="section container" id="projects">
   <div class="section-head reveal">
     <div>
       <span class="mono">01 — Built &amp; shipped</span>
-      <h2>Platforms I've built</h2>
+      <h2>Projects I've built</h2>
       <p>Live, end-to-end products — not prototypes. Each one is running in production.</p>
     </div>
     <a class="section-link" href="platforms.html">
@@ -144,11 +163,89 @@
 
 <div class="container"><hr class="divider"></div>
 
-<!-- RESEARCH -->
-<section class="section container">
+<!-- SKILLS -->
+<section class="section container" id="skills">
   <div class="section-head reveal">
     <div>
-      <span class="mono">02 — Research analyst</span>
+      <span class="mono">02 — Capabilities</span>
+      <h2>Analyst's eye. Builder's hands.</h2>
+      <p>A rare overlap: the rigor to evaluate markets and the engineering to ship the products in them.</p>
+    </div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="sg-head">
+        <span class="sg-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 5-7"/></svg></span>
+        <div><h3>Research &amp; Analysis</h3><div class="sg-sub">Where I'm published</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip">Competitive Analysis</span>
+        <span class="chip">SPARK Matrix™ Methodology</span>
+        <span class="chip">Market Research</span>
+        <span class="chip">Data Analysis</span>
+        <span class="chip">SQL</span>
+        <span class="chip">Financial Modeling</span>
+        <span class="chip">Vendor Benchmarking</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="sg-head">
+        <span class="sg-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></span>
+        <div><h3>Product &amp; Strategy</h3><div class="sg-sub">How I think</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip">Product Strategy</span>
+        <span class="chip">Roadmapping</span>
+        <span class="chip">User Research</span>
+        <span class="chip">Requirements</span>
+        <span class="chip">Go-to-Market</span>
+        <span class="chip">Metrics &amp; KPIs</span>
+        <span class="chip">Stakeholder Comms</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="sg-head">
+        <span class="sg-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></svg></span>
+        <div><h3>Engineering &amp; Build</h3><div class="sg-sub">What I ship</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip">Full-Stack Dev</span>
+        <span class="chip">Python</span>
+        <span class="chip">JavaScript</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">Redis</span>
+        <span class="chip">AI Agents</span>
+        <span class="chip">Railway / Deploy</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="sg-head">
+        <span class="sg-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+        <div><h3>Craft &amp; Tools</h3><div class="sg-sub">My toolkit</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip">Git</span>
+        <span class="chip">Figma</span>
+        <span class="chip">Excel / Sheets</span>
+        <span class="chip">Technical Writing</span>
+        <span class="chip">Data Viz</span>
+        <span class="chip">Prompt Engineering</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="divider"></div>
+
+<!-- RESEARCH -->
+<section class="section container" id="research">
+  <div class="section-head reveal">
+    <div>
+      <span class="mono">03 — Research analyst</span>
       <h2>Industry research, done rigorously</h2>
       <p>Lead analyst on multiple 2025 SPARK Matrix™ studies ranking enterprise software vendors. Published under my employer — featured and cited across the industry.</p>
     </div>
@@ -197,10 +294,10 @@
 <div class="container"><hr class="divider"></div>
 
 <!-- BLOG -->
-<section class="section container">
+<section class="section container" id="blog">
   <div class="section-head reveal">
     <div>
-      <span class="mono">03 — The HETU way 🤷</span>
+      <span class="mono">04 — The HETU way 🤷</span>
       <h2>From the blog</h2>
       <p>Long-form takes on history, society, and the absurdities of corporate life.</p>
     </div>
@@ -243,23 +340,24 @@
   </div>
 </section>
 
-<!-- CONTACT CTA -->
-<section class="section container">
-  <div class="cta reveal">
-    <div class="cta-inner">
-      <span class="mono">Let's talk</span>
-      <h2>Analyst's eye. Builder's hands.</h2>
-      <p>Open to product, strategy, and research roles where both halves matter. Reach out — I'm quick to reply.</p>
-      <div class="cta-actions">
-        <a class="btn btn-primary" href="mailto:hetansh.ps96@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-          Email me
-        </a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/hetansh-shah-ba7379204/" target="_blank" rel="noopener">Connect on LinkedIn</a>
-      </div>
+<!-- CONTACT -->
+<section class="section container" id="contact">
+  <div class="contact-card glass reveal">
+    <span class="mono">Let's talk</span>
+    <h2>Let's build something <span class="grad">worth shipping.</span></h2>
+    <p>Open to product, strategy, and research roles where both halves matter. Reach out — I'm quick to reply.</p>
+    <div class="contact-actions">
+      <a class="btn btn-primary magnetic" href="mailto:hetansh.ps96@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        Email me
+      </a>
+      <a class="btn btn-ghost magnetic" href="https://www.linkedin.com/in/hetansh-shah-ba7379204/" target="_blank" rel="noopener">Connect on LinkedIn</a>
     </div>
+    <a class="contact-email" href="mailto:hetansh.ps96@gmail.com">hetansh.ps96@gmail.com</a>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -280,6 +378,9 @@
 </footer>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <script src="app.js"></script>
+<script type="module" src="home.js"></script>
 </body>
 </html>
