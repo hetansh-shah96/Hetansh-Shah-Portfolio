@@ -28,9 +28,14 @@ import * as THREE from 'three';
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
   camera.position.set(0, 0, 6);
 
-  // ---- the floating crystal -------------------------------------------
+  // ---- the floating crystal (offset upper-right of the portrait) -------
+  const pivot = new THREE.Group();
+  pivot.position.set(1.25, 0.62, 0);
+  pivot.scale.setScalar(0.9);
+  scene.add(pivot);
+
   const group = new THREE.Group();
-  scene.add(group);
+  pivot.add(group);
 
   const coreGeo = new THREE.IcosahedronGeometry(1.55, 0);
   const coreMat = new THREE.MeshStandardMaterial({
