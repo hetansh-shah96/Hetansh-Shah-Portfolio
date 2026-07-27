@@ -31,9 +31,11 @@ import * as THREE from 'three';
   camera.position.set(0, 0, 6);
 
   // ---- the floating data network (offset upper-right of the portrait) --
+  // on mobile the portrait is centered with little room to its side, so the
+  // network is centered behind/around it (halo) instead of offset to one side
   const pivot = new THREE.Group();
-  pivot.position.set(isMobile ? 0.85 : 1.25, isMobile ? 0.5 : 0.62, 0);
-  pivot.scale.setScalar(isMobile ? 0.72 : 0.9);
+  pivot.position.set(isMobile ? 0 : 1.25, isMobile ? 0.1 : 0.62, isMobile ? -0.6 : 0);
+  pivot.scale.setScalar(isMobile ? 0.95 : 0.9);
   scene.add(pivot);
 
   const group = new THREE.Group();
@@ -43,13 +45,13 @@ import * as THREE from 'three';
   const netNodes = [];
 
   const hub = new THREE.Mesh(
-    new THREE.SphereGeometry(0.22, 24, 24),
+    new THREE.SphereGeometry(isMobile ? 0.27 : 0.22, 24, 24),
     new THREE.MeshStandardMaterial({ color: 0x6aa3ff, emissive: 0x1a3a7a, emissiveIntensity: 1.1, metalness: 0.4, roughness: 0.25 })
   );
   group.add(hub);
   netNodes.push({ mesh: hub, pos: new THREE.Vector3(0, 0, 0), isHub: true });
 
-  const nodeGeo = new THREE.SphereGeometry(0.09, isMobile ? 10 : 16, isMobile ? 10 : 16);
+  const nodeGeo = new THREE.SphereGeometry(isMobile ? 0.115 : 0.09, isMobile ? 10 : 16, isMobile ? 10 : 16);
   const nodeCount = isMobile ? 9 : 15;
   for (let i = 0; i < nodeCount; i++) {
     const r = 1.15 + Math.random() * 1.05;
