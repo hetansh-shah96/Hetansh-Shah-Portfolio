@@ -132,7 +132,7 @@ html, body { overflow-x: clip; }
 /* focal portrait with animated gradient halo + floating chips */
 .portrait {
   position: relative; z-index: 3;
-  width: min(320px, 76%);
+  width: min(240px, 58%);
   transform-style: preserve-3d; will-change: transform;
   transition: transform .2s ease-out;
 }
@@ -299,11 +299,11 @@ html, body { overflow-x: clip; }
 @media (max-width: 980px) {
   .hero-grid-v2 { grid-template-columns: 1fr; gap: 30px; }
   .hero-visual { height: clamp(360px, 84vw, 480px); order: -1; }
-  .portrait { width: min(280px, 70%); }
+  .portrait { width: min(220px, 62%); }
   .skills-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
-  .portrait { width: min(248px, 66%); }
+  .portrait { width: min(190px, 56%); }
   .float-chip { font-size: 10px; padding: 7px 11px; }
   .float-chip.chip-top { transform: translateX(20%); --fx: translateX(20%); }
   .float-chip.chip-bot { transform: translateX(-16%); --fx: translateX(-16%); }
