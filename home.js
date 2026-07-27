@@ -32,7 +32,7 @@ import * as THREE from 'three';
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
   camera.position.set(0, 0, 6);
 
-  // ---- the floating crystal (offset upper-right of the portrait) -------
+  // ---- the floating data network (offset upper-right of the portrait) --
   const pivot = new THREE.Group();
   pivot.position.set(1.25, 0.62, 0);
   pivot.scale.setScalar(0.9);
@@ -41,20 +41,48 @@ import * as THREE from 'three';
   const group = new THREE.Group();
   pivot.add(group);
 
-  const coreGeo = new THREE.IcosahedronGeometry(1.55, 0);
-  const coreMat = new THREE.MeshStandardMaterial({
-    color: 0x6aa3ff, metalness: 0.55, roughness: 0.16, flatShading: true,
-    emissive: 0x0a1830, emissiveIntensity: 0.6
-  });
-  const core = new THREE.Mesh(coreGeo, coreMat);
-  group.add(core);
+  const netColors = [0x6aa3ff, 0xb06aff, 0x4fe0d0, 0xb8ccff];
+  const netNodes = [];
 
-  // glowing wireframe shell
-  const shell = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(2.05, 1),
-    new THREE.MeshBasicMaterial({ color: 0xb8ccff, wireframe: true, transparent: true, opacity: 0.16 })
+  const hub = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 24, 24),
+    new THREE.MeshStandardMaterial({ color: 0x6aa3ff, emissive: 0x1a3a7a, emissiveIntensity: 1.1, metalness: 0.4, roughness: 0.25 })
   );
-  group.add(shell);
+  group.add(hub);
+  netNodes.push({ mesh: hub, pos: new THREE.Vector3(0, 0, 0), isHub: true });
+
+  const nodeGeo = new THREE.SphereGeometry(0.09, 16, 16);
+  const nodeCount = 15;
+  for (let i = 0; i < nodeCount; i++) {
+    const r = 1.15 + Math.random() * 1.05;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    const pos = new THREE.Vector3(r * Math.sin(ph) * Math.cos(th), r * Math.sin(ph) * Math.sin(th), r * Math.cos(ph));
+    const c = netColors[i % netColors.length];
+    const mesh = new THREE.Mesh(nodeGeo, new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.7, metalness: 0.3, roughness: 0.3 }));
+    mesh.position.copy(pos);
+    group.add(mesh);
+    netNodes.push({ mesh, pos, basePos: pos.clone(), phase: Math.random() * Math.PI * 2 });
+  }
+
+  const netLines = [];
+  function makeNetLine(a, b, mat) {
+    const g = new THREE.BufferGeometry().setFromPoints([a, b]);
+    const l = new THREE.Line(g, mat);
+    group.add(l);
+    return l;
+  }
+  const hubLineMat = new THREE.LineBasicMaterial({ color: 0x6aa3ff, transparent: true, opacity: 0.28 });
+  for (let i = 1; i < netNodes.length; i++) {
+    netLines.push({ line: makeNetLine(netNodes[0].pos, netNodes[i].pos, hubLineMat), a: 0, b: i });
+  }
+  for (let i = 0; i < 10; i++) {
+    const a = 1 + Math.floor(Math.random() * nodeCount);
+    const b = 1 + Math.floor(Math.random() * nodeCount);
+    if (a !== b) {
+      netLines.push({ line: makeNetLine(netNodes[a].pos, netNodes[b].pos, new THREE.LineBasicMaterial({ color: 0xb06aff, transparent: true, opacity: 0.14 })), a, b });
+    }
+  }
 
   // ---- particle field --------------------------------------------------
   const pCount = 380;
@@ -112,9 +140,22 @@ import * as THREE from 'three';
       group.rotation.y += 0.0035;
       group.rotation.x = Math.sin(t * 0.35) * 0.18;
       group.position.y = Math.sin(t * 0.8) * 0.14;
-      shell.rotation.y -= 0.0016;
-      shell.rotation.z += 0.0009;
       particles.rotation.y += 0.0004;
+
+      netNodes.forEach((n) => {
+        if (n.isHub) return;
+        n.mesh.position.copy(n.basePos).addScaledVector(
+          new THREE.Vector3(Math.sin(t * 0.6 + n.phase), Math.cos(t * 0.5 + n.phase), Math.sin(t * 0.4 + n.phase)),
+          0.06
+        );
+      });
+      netLines.forEach(({ line, a, b }) => {
+        const pos = line.geometry.attributes.position.array;
+        pos[0] = netNodes[a].pos.x; pos[1] = netNodes[a].pos.y; pos[2] = netNodes[a].pos.z;
+        pos[3] = netNodes[b].pos.x; pos[4] = netNodes[b].pos.y; pos[5] = netNodes[b].pos.z;
+        line.geometry.attributes.position.needsUpdate = true;
+      });
+      hub.scale.setScalar(1 + Math.sin(t * 2) * 0.06);
     }
 
     cx += (tx - cx) * 0.05;
