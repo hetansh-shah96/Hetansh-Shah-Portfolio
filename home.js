@@ -11,22 +11,20 @@ import * as THREE from 'three';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = window.matchMedia('(max-width: 720px), (pointer: coarse)').matches;
 
-  // skip the WebGL scene on phones — battery/perf win, CSS gradient orb fallback looks great alone
-  if (isMobile) { document.body.classList.add('no-webgl'); return; }
-
-  // WebGL capability check
+  // WebGL capability check — mobile still gets the scene (it's lightweight),
+  // just with a trimmed node/particle count and lower pixel ratio below.
   let gl = null;
   try { gl = canvas.getContext('webgl2') || canvas.getContext('webgl'); } catch (e) { /* noop */ }
   if (!gl) { document.body.classList.add('no-webgl'); return; }
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isMobile, powerPreference: 'high-performance' });
   } catch (e) {
     document.body.classList.add('no-webgl');
     return;
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
@@ -34,8 +32,8 @@ import * as THREE from 'three';
 
   // ---- the floating data network (offset upper-right of the portrait) --
   const pivot = new THREE.Group();
-  pivot.position.set(1.25, 0.62, 0);
-  pivot.scale.setScalar(0.9);
+  pivot.position.set(isMobile ? 0.85 : 1.25, isMobile ? 0.5 : 0.62, 0);
+  pivot.scale.setScalar(isMobile ? 0.72 : 0.9);
   scene.add(pivot);
 
   const group = new THREE.Group();
@@ -51,8 +49,8 @@ import * as THREE from 'three';
   group.add(hub);
   netNodes.push({ mesh: hub, pos: new THREE.Vector3(0, 0, 0), isHub: true });
 
-  const nodeGeo = new THREE.SphereGeometry(0.09, 16, 16);
-  const nodeCount = 15;
+  const nodeGeo = new THREE.SphereGeometry(0.09, isMobile ? 10 : 16, isMobile ? 10 : 16);
+  const nodeCount = isMobile ? 9 : 15;
   for (let i = 0; i < nodeCount; i++) {
     const r = 1.15 + Math.random() * 1.05;
     const th = Math.random() * Math.PI * 2;
@@ -76,7 +74,8 @@ import * as THREE from 'three';
   for (let i = 1; i < netNodes.length; i++) {
     netLines.push({ line: makeNetLine(netNodes[0].pos, netNodes[i].pos, hubLineMat), a: 0, b: i });
   }
-  for (let i = 0; i < 10; i++) {
+  const crossLinkCount = isMobile ? 5 : 10;
+  for (let i = 0; i < crossLinkCount; i++) {
     const a = 1 + Math.floor(Math.random() * nodeCount);
     const b = 1 + Math.floor(Math.random() * nodeCount);
     if (a !== b) {
@@ -85,7 +84,7 @@ import * as THREE from 'three';
   }
 
   // ---- particle field --------------------------------------------------
-  const pCount = 380;
+  const pCount = isMobile ? 160 : 380;
   const pPos = new Float32Array(pCount * 3);
   for (let i = 0; i < pCount; i++) {
     const r = 4 + Math.random() * 6;
