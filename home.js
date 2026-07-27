@@ -9,6 +9,10 @@ import * as THREE from 'three';
   if (!canvas) return;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.matchMedia('(max-width: 720px), (pointer: coarse)').matches;
+
+  // skip the WebGL scene on phones — battery/perf win, CSS gradient orb fallback looks great alone
+  if (isMobile) { document.body.classList.add('no-webgl'); return; }
 
   // WebGL capability check
   let gl = null;

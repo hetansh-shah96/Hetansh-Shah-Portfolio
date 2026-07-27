@@ -258,7 +258,7 @@ body::before {
   transition: transform .2s, border-color .2s, box-shadow .2s;
   overflow: hidden;
 }
-.card:hover { transform: translateY(-4px); border-color: var(--line-2); box-shadow: 0 24px 50px -28px rgba(0,0,0,0.8); }
+.card:hover { border-color: var(--line-2); box-shadow: 0 24px 50px -28px rgba(0,0,0,0.8); }
 
 .tag {
   display: inline-flex; align-items: center; gap: 7px;
