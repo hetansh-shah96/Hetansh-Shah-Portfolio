@@ -105,10 +105,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ---- Lenis smooth scrolling (loaded only where the CDN script is) ----
+  // ---- Lenis: used only for animated anchor-link scrollTo, not wheel input.
+  // smoothWheel re-processes every wheel/trackpad delta through its own lerp,
+  // which fights a trackpad's native OS momentum scrolling and reads as
+  // rough/jittery instead of smooth — so let wheel/trackpad scroll pass
+  // through natively and keep Lenis only for the nav-click scrollTo below.
   var lenis = null;
   if (window.Lenis && !reduce) {
-    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1.0 });
+    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: false });
     function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
   }
