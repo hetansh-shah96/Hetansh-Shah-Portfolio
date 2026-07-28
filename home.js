@@ -129,12 +129,15 @@ import * as THREE from 'three';
     }, { passive: true });
   }
 
-  // ---- render loop (pauses when tab hidden) ----------------------------
+  // ---- render loop (pauses when tab hidden or scrolled out of view) ----
   const clock = new THREE.Clock();
   let running = true;
+  let visible = true;
+  let ticking = false;
 
   function tick() {
-    if (!running) return;
+    if (!running || !visible) { ticking = false; return; }
+    ticking = true;
     const t = clock.getElapsedTime();
 
     if (!reduce) {
@@ -172,6 +175,18 @@ import * as THREE from 'three';
 
   document.addEventListener('visibilitychange', function () {
     running = !document.hidden;
-    if (running) { clock.start(); tick(); }
+    if (running && visible && !ticking) { clock.start(); tick(); }
   });
+
+  // stop rendering entirely once the hero scrolls off-screen — the render
+  // loop was previously unconditional, so it kept burning main-thread/GPU
+  // time (particle field, per-frame line-geometry updates, 3 point lights)
+  // the whole time the page was open, competing with Lenis/scroll for frames.
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      visible = entry.isIntersecting;
+      if (visible && running && !ticking) { clock.start(); tick(); }
+    });
+  }, { threshold: 0 });
+  io.observe(canvas);
 })();
